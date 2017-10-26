@@ -69,8 +69,7 @@ pygame.mouse.set_visible(False) # Hide the cursor, TODO: stop cursor from escapi
 #while running
 blnRunning = True
 while blnRunning:
-    screen.fill((255,255,255))
-    objPlayer.draw(screen)
+
 
     for event in pygame.event.get():
         """
@@ -112,7 +111,7 @@ while blnRunning:
             objPlayer.move_down(half)
         if keys[K_d]:
             objPlayer.move_right(half)
-
-
+    screen.fill((255, 255, 255))
+    objPlayer.draw(screen)
     pygame.display.update()
     clock.tick(40)
