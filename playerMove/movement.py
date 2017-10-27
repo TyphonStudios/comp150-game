@@ -41,7 +41,7 @@ class Player(object):
         self.rect = self.image.get_rect()
 
     def draw(self, surface):
-        rotImage = pygame.transform.rotate(self.image, (50 * self.angle))
+        rotImage = pygame.transform.rotate(self.image, self.angle)
         rotRect = rotImage.get_rect(center = self.rect.center)
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
         pygame.display.update()
@@ -79,7 +79,16 @@ while blnRunning:
         """
         if event.type == MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
-            objPlayer.angle = math.atan2((objPlayer.x - mouseX), (objPlayer.y - mouseY))
+
+            # Base the mouse position off the centre of the screen
+            mouseX = mouseX - (screenX / 2)
+            mouseY = mouseY - (screenY / 2)
+
+            # Workout the angle for the player to face
+            angle = math.atan2(mouseY, mouseX) * 180 / math.pi
+            angle = 270 - angle
+
+            objPlayer.angle = angle
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
