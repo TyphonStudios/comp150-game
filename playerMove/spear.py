@@ -1,6 +1,5 @@
 import pygame
 import math
-#https://stackoverflow.com/questions/5664158/pygame-get-sprite-group
 
 class spear():
     def __init__(self, parent):
