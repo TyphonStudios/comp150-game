@@ -49,16 +49,16 @@ class Player(object):
         rotRect = rotImage.get_rect(center = self.rect.center)
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
 
-    def move_up(self, half):
+    def moveUp(self, half):
         self.y = max(self.y - (self.speed / half), 0)
 
-    def move_left(self, half):
+    def moveLeft(self, half):
         self.x = max(self.x - (self.speed / half), 0)
 
-    def move_down(self, half):
+    def moveDown(self, half):
         self.y = min(self.y + (self.speed / half), screenY - self.sizeY)
 
-    def move_right(self, half):
+    def moveRight(self, half):
         self.x = min(self.x + (self.speed / half), screenX - self.sizeX)
 
     def killEnemy(self, enemy):
@@ -104,6 +104,9 @@ while blnRunning:
             angle = math.atan2(mouseY, mouseX) * 180 / math.pi
             objPlayer.angle = 270 - angle
 
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            objWeapon.attack()
+
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
@@ -117,8 +120,7 @@ while blnRunning:
                     hideCursor = True
                 pygame.event.set_grab(hideCursor)
                 pygame.mouse.set_visible(not hideCursor)
-            if event.key == pygame.K_q:
-                objWeapon.attack()
+
     """
     --------------------------------------------------------------------------------------------------------------------
         When the keyboard is pressed (WASD), move the player
@@ -136,13 +138,13 @@ while blnRunning:
 
         # Move the player
         if keys[K_w]:
-            objPlayer.move_up(half)
+            objPlayer.moveUp(half)
         if keys[K_a]:
-            objPlayer.move_left(half)
+            objPlayer.moveLeft(half)
         if keys[K_s]:
-            objPlayer.move_down(half)
+            objPlayer.moveDown(half)
         if keys[K_d]:
-            objPlayer.move_right(half)
+            objPlayer.moveRight(half)
 
     screen.fill((255, 255, 255))
 
