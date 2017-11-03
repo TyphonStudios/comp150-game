@@ -4,6 +4,8 @@ import pygame
 import sys
 import math
 import time
+import random
+from random import randint
 from pygame.locals import *
 import classEnemy
 import classSpawnPoint
@@ -37,8 +39,8 @@ class Player(object):
         self.image = pygame.image.load('player.png')
         self.sizeX = self.image.get_width()
         self.sizeY = self.image.get_height()
-        self.x = 1
-        self.y = 1
+        self.x = 300
+        self.y = 400
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
@@ -67,8 +69,8 @@ class Enemy(object):
         self.image = pygame.image.load('ball.png')
         self.sizeX = self.image.get_width()
         self.sizeY = self.image.get_height()
-        self.x = 400
-        self.y = 300
+        self.x = 0
+        self.y = 0
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
@@ -80,8 +82,128 @@ class Enemy(object):
         surface.blit(self.image, (self.x,self.y))
         pygame.display.update
 
+    def spawn(self):
+        """
+        Spawn function
+         This function makes use of a random number seed to spawn an enemy in a random unoccupied location.
+        """
+        side = randint(1,3)
+        if side == 1:
+            position = randint(1,4)
+            if position == 1:
+                if spawnT1.boolPointOccupied == False:
+                    self.spawnPoint = spawnT1
+                    self.x = spawnT1.x
+                    self.y = spawnT1.y
+                    print "Spawn Top 1"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 2:
+                if spawnT2.boolPointOccupied == False:
+                    self.spawnPoint = spawnT2
+                    self.x = spawnT2.x
+                    self.y = spawnT2.y
+                    print "Spawn Top 2"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 3:
+                if spawnT3.boolPointOccupied == False:
+                    self.spawnPoint = spawnT3
+                    self.x = spawnT3.x
+                    self.y = spawnT3.y
+                    print "Spawn Top 3"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            else:
+                if spawnT4.boolPointOccupied == False:
+                    self.spawnPoint = spawnT4
+                    self.x = spawnT4.x
+                    self.y = spawnT4.y
+                    print "Spawn Top 4"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+        elif side == 2:
+            position = randint(1,4)
+            if position == 1:
+                if spawnF1.boolPointOccupied == False:
+                    self.spawnPoint = spawnF1
+                    self.x = spawnF1.x
+                    self.y = spawnF1.y
+                    print "Spawn Flank 1"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 2:
+                if spawnF2.boolPointOccupied == False:
+                    self.spawnPoint = spawnF2
+                    self.x = spawnF2.x
+                    self.y = spawnF2.y
+                    print "Spawn Flank 2"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 3:
+                if spawnF3.boolPointOccupied == False:
+                    self.spawnPoint = spawnF3
+                    self.x = spawnF3.x
+                    self.y = spawnF3.y
+                    print "Spawn Flank 3"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            else:
+                if spawnF4.boolPointOccupied == False:
+                    self.spawnPoint = spawnF4
+                    self.x = spawnF4.x
+                    self.y = spawnF4.y
+                    print "Spawn Flank 4"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+        else:
+            position = randint(1, 4)
+            if position == 1:
+                if spawnB1.boolPointOccupied == False:
+                    self.spawnPoint = spawnB1
+                    self.x = spawnB1.x
+                    self.y = spawnB1.y
+                    print "Spawn Bottom 1"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 2:
+                if spawnB2.boolPointOccupied == False:
+                    self.spawnPoint = spawnB2
+                    self.x = spawnB2.x
+                    self.y = spawnB2.y
+                    print "Spawn Bottom 2"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            elif position == 3:
+                if spawnB3.boolPointOccupied == False:
+                    self.spawnPoint = spawnB3
+                    self.x = spawnB3.x
+                    self.y = spawnB3.y
+                    print "Spawn Bottom 3"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                else:
+                    print""
+            else:
+                if spawnB4.boolPointOccupied == False:
+                    self.spawnPoint = spawnB4
+                    self.x = spawnB4.x
+                    self.y = spawnB4.y
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                    print "Spawn Bottom 4"
+                else:
+                    print""
 pygame.init()
-screenX, screenY = 800, 600
+screenX, screenY = 1000, 1000
 screen = pygame.display.set_mode((screenX, screenY))
 objPlayer = Player()
 objEnemy = Enemy()
@@ -91,21 +213,46 @@ objEnemyii.y = 300
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(False) # Hide the cursor, TODO: stop cursor from escaping the window
 blnRunning = True
+spawnT1 = classSpawnPoint.spawnPoint()
+spawnT2 = classSpawnPoint.spawnPoint()
+spawnT3 = classSpawnPoint.spawnPoint()
+spawnT4 = classSpawnPoint.spawnPoint()
+spawnF1 = classSpawnPoint.spawnPoint()
+spawnF2 = classSpawnPoint.spawnPoint()
+spawnF3 = classSpawnPoint.spawnPoint()
+spawnF4 = classSpawnPoint.spawnPoint()
+spawnB1 = classSpawnPoint.spawnPoint()
+spawnB2 = classSpawnPoint.spawnPoint()
+spawnB3 = classSpawnPoint.spawnPoint()
+spawnB4 = classSpawnPoint.spawnPoint()
+spawnT1.x = 0
+spawnT2.x = 160
+spawnT3.x = 360
+spawnT4.x = 760
+spawnF1.x = 800
+spawnF2.x = 800
+spawnF3.x = 800
+spawnF4.x = 800
+spawnB1.x = 0
+spawnB2.x = 160
+spawnB3.x = 360
+spawnB4.x = 760
+spawnT1.y = 0
+spawnT2.y = 0
+spawnT3.y = 0
+spawnT4.y = 0
+spawnF1.y = 0
+spawnF2.y = 200
+spawnF3.y = 400
+spawnF4.y = 540
+spawnB1.y = 600
+spawnB2.y = 600
+spawnB3.y = 600
+spawnB4.y = 600
+print str(spawnB3.x)
+objEnemy.spawn()
+objEnemyii.spawn()
 while blnRunning:
-
-    spawnTopOne = classSpawnPoint.spawnPoint()
-    spawnTopTwo = classSpawnPoint.spawnPoint()
-    spawnTopThree = classSpawnPoint.spawnPoint()
-    spawnTopFour = classSpawnPoint.spawnPoint()
-    spawnFlankOne = classSpawnPoint.spawnPoint()
-    spawnFlankTwo = classSpawnPoint.spawnPoint()
-    spawnFlankThree = classSpawnPoint.spawnPoint()
-    spawnFlankFour = classSpawnPoint.spawnPoint()
-    spawnBottomOne = classSpawnPoint.spawnPoint()
-    spawnBottomTwo = classSpawnPoint.spawnPoint()
-    spawnBottomThree = classSpawnPoint.spawnPoint()
-    spawnBottomFour = classSpawnPoint.spawnPoint()
-
 
     for event in pygame.event.get():
         """
