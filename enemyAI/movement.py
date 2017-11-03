@@ -14,9 +14,9 @@ import classSpawnPoint
 ========================================================================================================================
 Player Class
 Define self
-    sprite = ball
-    x = 1
-    y = 1
+    sprite = player
+    x = 300
+    y = 400
     angle = 0 degrees
     create rectangle around the sprite
 
@@ -35,6 +35,7 @@ Define move_up / move_left / move_down / move_right
 """
 
 class Player(object):
+# ----------------------------------------------------------------------------------------------------------------------
     def __init__(self):
         self.image = pygame.image.load('player.png')
         self.sizeX = self.image.get_width()
@@ -44,26 +45,48 @@ class Player(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
-
+# ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, (50 * self.angle))
         rotRect = rotImage.get_rect(center = self.rect.center)
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
         pygame.display.update()
-
+# ----------------------------------------------------------------------------------------------------------------------
     def move_up(self, half):
         self.y = max(self.y - (self.speed / half), 0)
-
+# ----------------------------------------------------------------------------------------------------------------------
     def move_left(self, half):
         self.x = max(self.x - (self.speed / half), 0)
-
+# ----------------------------------------------------------------------------------------------------------------------
     def move_down(self, half):
         self.y = min(self.y + (self.speed / half), screenY - self.sizeY)
-
+# ----------------------------------------------------------------------------------------------------------------------
     def move_right(self, half):
         self.x = min(self.x + (self.speed / half), screenX - self.sizeX)
-
+# ----------------------------------------------------------------------------------------------------------------------
 classEnemy.spawnEnemies()
+"""
+========================================================================================================================
+Enemy Class
+Define self
+    sprite = ball
+    x = 0
+    y = 0
+    angle = 0 degrees
+    create rectangle around the sprite
+
+Define draw
+    detect change in mouse position and x 50 as a sensitivity modifier
+    rotate a rectangle around the player to face the mouse
+    rotate the player to be back in line with the rectangle
+    transfer to screen
+
+Define spawn
+    Randomly select a spawn point that is predefined, these points are allong 3 sides of the screen and an enemy can
+    spawn on any one of these 12 spawn points with an even chance
+
+========================================================================================================================
+"""
 class Enemy(object):
     def __init__(self):
         self.image = pygame.image.load('ball.png')
@@ -74,31 +97,38 @@ class Enemy(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
-
+# ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, (1 * self.angle))
         rotRect = rotImage.get_rect(center = self.rect.center)
+        self.angle = math.atan2((self.x - objPlayer.x), (self.y -  objPlayer.y))
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
         surface.blit(self.image, (self.x,self.y))
         pygame.display.update
 
+# ----------------------------------------------------------------------------------------------------------------------
     def spawn(self):
         """
         Spawn function
          This function makes use of a random number seed to spawn an enemy in a random unoccupied location.
         """
-        side = randint(1,3)
+        side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         if side == 1:
-            position = randint(1,4)
+            position = randint(1,4)#calculate which of the 4 points along the top will be used as the enemies
+                                   #  spawn location
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if position == 1:
-                if spawnT1.boolPointOccupied == False:
+                if spawnT1.boolPointOccupied == False: # check if the spawn is occupied
                     self.spawnPoint = spawnT1
                     self.x = spawnT1.x
                     self.y = spawnT1.y
                     print "Spawn Top 1"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnT1.boolPointOccupied = True #set spawn to occupied
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 2:
                 if spawnT2.boolPointOccupied == False:
                     self.spawnPoint = spawnT2
@@ -106,8 +136,10 @@ class Enemy(object):
                     self.y = spawnT2.y
                     print "Spawn Top 2"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnT2.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 3:
                 if spawnT3.boolPointOccupied == False:
                     self.spawnPoint = spawnT3
@@ -115,8 +147,10 @@ class Enemy(object):
                     self.y = spawnT3.y
                     print "Spawn Top 3"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnT3.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             else:
                 if spawnT4.boolPointOccupied == False:
                     self.spawnPoint = spawnT4
@@ -124,10 +158,14 @@ class Enemy(object):
                     self.y = spawnT4.y
                     print "Spawn Top 4"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnT4.boolPointOccupied = True
+
                 else:
                     print""
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         elif side == 2:
             position = randint(1,4)
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if position == 1:
                 if spawnF1.boolPointOccupied == False:
                     self.spawnPoint = spawnF1
@@ -135,8 +173,10 @@ class Enemy(object):
                     self.y = spawnF1.y
                     print "Spawn Flank 1"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnF1.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 2:
                 if spawnF2.boolPointOccupied == False:
                     self.spawnPoint = spawnF2
@@ -144,8 +184,10 @@ class Enemy(object):
                     self.y = spawnF2.y
                     print "Spawn Flank 2"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnF2.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 3:
                 if spawnF3.boolPointOccupied == False:
                     self.spawnPoint = spawnF3
@@ -153,8 +195,10 @@ class Enemy(object):
                     self.y = spawnF3.y
                     print "Spawn Flank 3"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnF3.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             else:
                 if spawnF4.boolPointOccupied == False:
                     self.spawnPoint = spawnF4
@@ -162,10 +206,13 @@ class Enemy(object):
                     self.y = spawnF4.y
                     print "Spawn Flank 4"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnF4.boolPointOccupied = True
                 else:
                     print""
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         else:
             position = randint(1, 4)
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if position == 1:
                 if spawnB1.boolPointOccupied == False:
                     self.spawnPoint = spawnB1
@@ -173,8 +220,10 @@ class Enemy(object):
                     self.y = spawnB1.y
                     print "Spawn Bottom 1"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnB1.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 2:
                 if spawnB2.boolPointOccupied == False:
                     self.spawnPoint = spawnB2
@@ -182,8 +231,11 @@ class Enemy(object):
                     self.y = spawnB2.y
                     print "Spawn Bottom 2"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnB2.boolPointOccupied = True
+
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif position == 3:
                 if spawnB3.boolPointOccupied == False:
                     self.spawnPoint = spawnB3
@@ -191,28 +243,53 @@ class Enemy(object):
                     self.y = spawnB3.y
                     print "Spawn Bottom 3"
                     print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnB3.boolPointOccupied = True
                 else:
                     print""
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             else:
                 if spawnB4.boolPointOccupied == False:
                     self.spawnPoint = spawnB4
                     self.x = spawnB4.x
                     self.y = spawnB4.y
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
                     print "Spawn Bottom 4"
+                    print "(" + str(self.x) + "," + str(self.y) + ")"
+                    spawnB4.boolPointOccupied = True
+
                 else:
                     print""
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def moveTowardsPlayer(self):
+        if self.x > objPlayer.x:
+            self.x -= 1
+        elif self.x < objPlayer.x:
+            self.x +=1
+        else:
+            self.x = self.x
+
+        if self.y > objPlayer.y:
+            self.y -= 1
+        elif self.y < objPlayer.y:
+            self.y +=1
+        else:
+            self.y = self.y
+#=======================================================================================================================
 pygame.init()
+# ----------------------------------------------------------------------------------------------------------------------
 screenX, screenY = 1000, 1000
-screen = pygame.display.set_mode((screenX, screenY))
+screen = pygame.display.set_mode((screenX, screenY))#
+# ----------------------------------------------------------------------------------------------------------------------
 objPlayer = Player()
 objEnemy = Enemy()
 objEnemyii = Enemy()
-objEnemyii.x = 100
-objEnemyii.y = 300
+# ----------------------------------------------------------------------------------------------------------------------
 clock = pygame.time.Clock()
-pygame.mouse.set_visible(False) # Hide the cursor, TODO: stop cursor from escaping the window
+# ----------------------------------------------------------------------------------------------------------------------
+pygame.mouse.set_visible(False) # Hide the cursor,
+# ----------------------------------------------------------------------------------------------------------------------
 blnRunning = True
+# ----------------------------------------------------------------------------------------------------------------------
 spawnT1 = classSpawnPoint.spawnPoint()
 spawnT2 = classSpawnPoint.spawnPoint()
 spawnT3 = classSpawnPoint.spawnPoint()
@@ -225,6 +302,7 @@ spawnB1 = classSpawnPoint.spawnPoint()
 spawnB2 = classSpawnPoint.spawnPoint()
 spawnB3 = classSpawnPoint.spawnPoint()
 spawnB4 = classSpawnPoint.spawnPoint()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 spawnT1.x = 0
 spawnT2.x = 160
 spawnT3.x = 360
@@ -249,9 +327,10 @@ spawnB1.y = 600
 spawnB2.y = 600
 spawnB3.y = 600
 spawnB4.y = 600
-print str(spawnB3.x)
+# ----------------------------------------------------------------------------------------------------------------------
 objEnemy.spawn()
 objEnemyii.spawn()
+# ======================================================================================================================
 while blnRunning:
 
     for event in pygame.event.get():
@@ -263,6 +342,7 @@ while blnRunning:
         if event.type == MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
             objPlayer.angle = math.atan2((objPlayer.x - mouseX), (objPlayer.y - mouseY))
+
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
@@ -288,20 +368,16 @@ while blnRunning:
         # Move the player
         if keys[K_w]:
             objPlayer.move_up(half)
-            objEnemy.angle = math.atan2((objEnemy.x - objPlayer.x), (objEnemy.y - objPlayer.y))
-            objEnemyii.angle = math.atan2((objEnemyii.x - objPlayer.x), (objEnemyii.y - objPlayer.y))
+
         if keys[K_a]:
             objPlayer.move_left(half)
-            objEnemy.angle = math.atan2((objEnemy.x - objPlayer.x), (objEnemy.y - objPlayer.y))
-            objEnemyii.angle = math.atan2((objEnemyii.x - objPlayer.x), (objEnemyii.y - objPlayer.y))
         if keys[K_s]:
             objPlayer.move_down(half)
-            objEnemy.angle = math.atan2((objEnemy.x - objPlayer.x), (objEnemy.y - objPlayer.y))
-            objEnemyii.angle = math.atan2((objEnemyii.x - objPlayer.x), (objEnemyii.y - objPlayer.y))
         if keys[K_d]:
             objPlayer.move_right(half)
-            objEnemy.angle = math.atan2((objEnemy.x - objPlayer.x), (objEnemy.y - objPlayer.y))
-            objEnemyii.angle = math.atan2((objEnemyii.x - objPlayer.x), (objEnemyii.y - objPlayer.y))
+    objEnemy.moveTowardsPlayer()
+    objEnemyii.moveTowardsPlayer()
+
     screen.fill((255, 255, 255))
     objEnemy.draw(screen)
     objEnemyii.draw(screen)
