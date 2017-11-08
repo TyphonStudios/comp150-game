@@ -4,6 +4,8 @@ import pygame
 import sys
 import math
 from pygame.locals import *
+from spear import *
+from enemy import *
 
 """
 ========================================================================================================================
@@ -29,6 +31,7 @@ Define move_up / move_left / move_down / move_right
 ========================================================================================================================
 """
 
+
 class Player(object):
     def __init__(self):
         self.image = pygame.image.load('ball.png')
@@ -39,37 +42,50 @@ class Player(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+        self.enemies = []
 
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, self.angle)
         rotRect = rotImage.get_rect(center = self.rect.center)
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
-        pygame.display.update()
 
-    def move_up(self, half):
+    def moveUp(self, half):
         self.y = max(self.y - (self.speed / half), 0)
 
-    def move_left(self, half):
+    def moveLeft(self, half):
         self.x = max(self.x - (self.speed / half), 0)
 
-    def move_down(self, half):
+    def moveDown(self, half):
         self.y = min(self.y + (self.speed / half), screenY - self.sizeY)
 
-    def move_right(self, half):
+    def moveRight(self, half):
         self.x = min(self.x + (self.speed / half), screenX - self.sizeX)
+
+    def killEnemy(self, enemy):
+        if self.enemies[enemy] is not None:
+            for i in xrange(len(self.enemies)):
+                self.enemies.remove(i)
+                spear.enemies.remove(i)
 
 
 pygame.init()
 screenX, screenY = 800, 600
 screen = pygame.display.set_mode((screenX, screenY))
 objPlayer = Player()
+objWeapon = spear(objPlayer)
+objEnemy = Enemy()
+objPlayer.enemies.append(objEnemy)
+objWeapon.enemies.append(objEnemy)
 clock = pygame.time.Clock()
-pygame.mouse.set_visible(False) # Hide the cursor, TODO: stop cursor from escaping the window
+
+hideCursor = True
+cursorBindHeld = False
+pygame.mouse.set_visible(not hideCursor) # Hide the cursor
+pygame.event.set_grab(hideCursor) # Lock the cursor to the window
 
 #while running
 blnRunning = True
 while blnRunning:
-
 
     for event in pygame.event.get():
         """
@@ -81,17 +97,30 @@ while blnRunning:
             mouseX, mouseY = pygame.mouse.get_pos()
 
             # Base the mouse position off the centre of the screen
-            mouseX = mouseX - (screenX / 2)
-            mouseY = mouseY - (screenY / 2)
+            mouseX -= (screenX / 2)
+            mouseY -= (screenY / 2)
 
             # Workout the angle for the player to face
             angle = math.atan2(mouseY, mouseX) * 180 / math.pi
-            angle = 270 - angle
+            objPlayer.angle = 270 - angle
 
-            objPlayer.angle = angle
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            objWeapon.attack()
+
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
+
+        elif event.type == pygame.KEYDOWN:
+            # Toggle the cursor
+            if event.key == pygame.K_ESCAPE:
+                if hideCursor:
+                    hideCursor = False
+                else:
+                    hideCursor = True
+                pygame.event.set_grab(hideCursor)
+                pygame.mouse.set_visible(not hideCursor)
+
     """
     --------------------------------------------------------------------------------------------------------------------
         When the keyboard is pressed (WASD), move the player
@@ -101,26 +130,28 @@ while blnRunning:
         keys = pygame.key.get_pressed()
 
         # Check for diagonals
-        half = 0
-        if keys[K_w]:
-            half = min(half + 1, 2)
-        if keys[K_a]:
-            half = min(half + 1, 2)
-        if keys[K_s]:
-            half = min(half + 1, 2)
-        if keys[K_d]:
-            half = min(half + 1, 2)
+        half = 1
+        if keys[K_w] and (keys[K_a] or keys[K_d]):
+            half = 2
+        if keys[K_s] and (keys[K_a] or keys[K_d]):
+            half = 2
 
         # Move the player
         if keys[K_w]:
-            objPlayer.move_up(half)
+            objPlayer.moveUp(half)
         if keys[K_a]:
-            objPlayer.move_left(half)
+            objPlayer.moveLeft(half)
         if keys[K_s]:
-            objPlayer.move_down(half)
+            objPlayer.moveDown(half)
         if keys[K_d]:
-            objPlayer.move_right(half)
+            objPlayer.moveRight(half)
+
     screen.fill((255, 255, 255))
+
+    for i in xrange(len(objPlayer.enemies)):
+        objPlayer.enemies[i].draw(screen)
+
     objPlayer.draw(screen)
+    objWeapon.draw(screen)
     pygame.display.update()
     clock.tick(40)
