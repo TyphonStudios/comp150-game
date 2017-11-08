@@ -1,3 +1,10 @@
+"""
+========================================================================================================================
+Author: Connor Sean Rodgers
+Program: Main & Movement
+Purpose: The main class for the game including the movement code
+========================================================================================================================
+"""
 #Imports
 from __future__ import division
 import pygame
@@ -112,152 +119,52 @@ class Enemy(object):
         Spawn function
          This function makes use of a random number seed to spawn an enemy in a random unoccupied location.
         """
-        side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if side == 1:
-            position = randint(1,4)#calculate which of the 4 points along the top will be used as the enemies
-                                   #  spawn location
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if position == 1:
-                if spawnT1.boolPointOccupied == False: # check if the spawn is occupied
-                    self.spawnPoint = spawnT1
-                    self.x = spawnT1.x
-                    self.y = spawnT1.y
-                    print "Spawn Top 1"
+        mustSpawn = True
+        while mustSpawn == True:
+            #print str(spawnPointsTop(0).x)
+            side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
+            print int(side)
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            if side == 1:
+                print "a"
+                #position = randint(1,4)#calculate which of the 4 points along the top will be used as the enemies
+                                       #  spawn location
+                position = randint(0,3)
+                print str(spawnPointsTop[position].boolPointOccupied)
+                if spawnPointsTop[position].boolPointOccupied == False:
+                   # self.spawnPoint = spawnPointsTop[position]
+                    self.x = spawnPointsTop[position].x
+                    self.y = spawnPointsTop[position].y
+                    print str(self.x)
                     print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnT1.boolPointOccupied = True #set spawn to occupied
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 2:
-                if spawnT2.boolPointOccupied == False:
-                    self.spawnPoint = spawnT2
-                    self.x = spawnT2.x
-                    self.y = spawnT2.y
-                    print "Spawn Top 2"
+                    spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
+                    mustSpawn = False
+    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            elif side == 2:
+                print "b"
+                position = randint(0, 3)
+                print str(spawnPointsFlank[position].boolPointOccupied)
+                if spawnPointsFlank[position].boolPointOccupied == False:
+                    #self.spawnPoint = spawnPointsFlank[position]
+                    self.x = spawnPointsFlank[position].x
+                    self.y = spawnPointsFlank[position].y
                     print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnT2.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 3:
-                if spawnT3.boolPointOccupied == False:
-                    self.spawnPoint = spawnT3
-                    self.x = spawnT3.x
-                    self.y = spawnT3.y
-                    print "Spawn Top 3"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnT3.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else:
-                if spawnT4.boolPointOccupied == False:
-                    self.spawnPoint = spawnT4
-                    self.x = spawnT4.x
-                    self.y = spawnT4.y
-                    print "Spawn Top 4"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnT4.boolPointOccupied = True
+                    spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
+                    mustSpawn = False
 
-                else:
-                    print""
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        elif side == 2:
-            position = randint(1,4)
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if position == 1:
-                if spawnF1.boolPointOccupied == False:
-                    self.spawnPoint = spawnF1
-                    self.x = spawnF1.x
-                    self.y = spawnF1.y
-                    print "Spawn Flank 1"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnF1.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 2:
-                if spawnF2.boolPointOccupied == False:
-                    self.spawnPoint = spawnF2
-                    self.x = spawnF2.x
-                    self.y = spawnF2.y
-                    print "Spawn Flank 2"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnF2.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 3:
-                if spawnF3.boolPointOccupied == False:
-                    self.spawnPoint = spawnF3
-                    self.x = spawnF3.x
-                    self.y = spawnF3.y
-                    print "Spawn Flank 3"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnF3.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
-                if spawnF4.boolPointOccupied == False:
-                    self.spawnPoint = spawnF4
-                    self.x = spawnF4.x
-                    self.y = spawnF4.y
-                    print "Spawn Flank 4"
+                print "c"
+                position = randint(0, 3)
+                print str(spawnPointsBottom[position].boolPointOccupied)
+                if spawnPointsBottom[position].boolPointOccupied == False:
+                    #self.spawnPoint = spawnPointsBottom[position]
+                    self.x = spawnPointsBottom[position].x
+                    self.y = spawnPointsBottom[position].y
+                    print str(self.x)
                     print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnF4.boolPointOccupied = True
-                else:
-                    print""
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        else:
-            position = randint(1, 4)
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if position == 1:
-                if spawnB1.boolPointOccupied == False:
-                    self.spawnPoint = spawnB1
-                    self.x = spawnB1.x
-                    self.y = spawnB1.y
-                    print "Spawn Bottom 1"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnB1.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 2:
-                if spawnB2.boolPointOccupied == False:
-                    self.spawnPoint = spawnB2
-                    self.x = spawnB2.x
-                    self.y = spawnB2.y
-                    print "Spawn Bottom 2"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnB2.boolPointOccupied = True
-
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            elif position == 3:
-                if spawnB3.boolPointOccupied == False:
-                    self.spawnPoint = spawnB3
-                    self.x = spawnB3.x
-                    self.y = spawnB3.y
-                    print "Spawn Bottom 3"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnB3.boolPointOccupied = True
-                else:
-                    print""
-# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else:
-                if spawnB4.boolPointOccupied == False:
-                    self.spawnPoint = spawnB4
-                    self.x = spawnB4.x
-                    self.y = spawnB4.y
-                    print "Spawn Bottom 4"
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnB4.boolPointOccupied = True
-
-                else:
-                    print""
+                    spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
+                    mustSpawn = False
 
 # ----------------------------------------------------------------------------------------------------------------------
     def moveTowardsPlayer(self):
@@ -289,6 +196,9 @@ clock = pygame.time.Clock()
 pygame.mouse.set_visible(False) # Hide the cursor,
 # ----------------------------------------------------------------------------------------------------------------------
 blnRunning = True
+spawnPointsTop = []
+spawnPointsFlank = []
+spawnPointsBottom = []
 # ----------------------------------------------------------------------------------------------------------------------
 spawnT1 = classSpawnPoint.spawnPoint()
 spawnT2 = classSpawnPoint.spawnPoint()
@@ -327,6 +237,27 @@ spawnB1.y = 600
 spawnB2.y = 600
 spawnB3.y = 600
 spawnB4.y = 600
+# ----------------------------------------------------------------------------------------------------------------------
+spawnPointsTop = {
+    0: spawnT1,
+    1: spawnT2,
+    2: spawnT3,
+    3: spawnT4
+}
+# ----------------------------------------------------------------------------------------------------------------------
+spawnPointsFlank = {
+    0: spawnF1,
+    1: spawnF2,
+    2: spawnF3,
+    3: spawnF4
+}
+# ----------------------------------------------------------------------------------------------------------------------
+spawnPointsBottom = {
+    0: spawnB1,
+    1: spawnB2,
+    2: spawnB3,
+    3: spawnB4
+}
 # ----------------------------------------------------------------------------------------------------------------------
 objEnemy.spawn()
 objEnemyii.spawn()
@@ -377,7 +308,6 @@ while blnRunning:
             objPlayer.move_right(half)
     objEnemy.moveTowardsPlayer()
     objEnemyii.moveTowardsPlayer()
-
     screen.fill((255, 255, 255))
     objEnemy.draw(screen)
     objEnemyii.draw(screen)
