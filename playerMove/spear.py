@@ -34,6 +34,10 @@ class spear():
                     # Collision check
                     tempX = posX - math.sin(math.radians(self.parent.angle)) * self.weaponReachProgress
                     tempY = posY - math.cos(math.radians(self.parent.angle)) * self.weaponReachProgress
+
+                    # Debug
+                    pygame.draw.rect(surface, (90, 150, 80), (tempX, tempY, 30, 30))
+
                     for i in xrange(self.weaponSpeed):
                         for enemy in xrange(len(self.enemies)):
                             if pygame.Rect(tempX, tempY, self.sizeX, self.sizeY).colliderect(
