@@ -27,7 +27,7 @@ class spear():
 
         # Check if collided
         if self.inAttack:
-            if self.weaponReachForwards:
+            if self.weaponReachForwards: # if weapon going forwards
                 if self.weaponReachProgress >= self.weaponReach:
                     self.weaponReachForwards = False
                 else:
@@ -40,7 +40,8 @@ class spear():
 
                     for i in xrange(self.weaponSpeed):
                         for enemy in xrange(len(self.enemies)):
-                            if pygame.Rect(tempX, tempY, self.sizeX, self.sizeY).colliderect(
+                            pygame.draw.rect(surface, (255,0,0), (tempX + 40, tempY, self.sizeX, self.sizeY))
+                            if pygame.Rect(tempX + 40, tempY, self.sizeX, self.sizeY).colliderect(
                                     pygame.Rect(self.enemies[enemy].x, self.enemies[enemy].y,
                                                 self.enemies[enemy].sizeX, self.enemies[enemy].sizeY)):
                                 self.weaponReachForwards = False
