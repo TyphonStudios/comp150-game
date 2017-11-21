@@ -116,8 +116,6 @@ class Enemy(object):
             print int(side)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             if side == 1:
-                print "a"
-                #position = randint(1,4)#calculate which of the 4 points along the top will be used as the enemies
                                        #  spawn location
                 position = randint(0,3)
                 print str(spawnPointsTop[position].boolPointOccupied)
@@ -131,7 +129,6 @@ class Enemy(object):
                     mustSpawn = False
     # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif side == 2:
-                print "b"
                 position = randint(0, 3)
                 print str(spawnPointsFlank[position].boolPointOccupied)
                 if spawnPointsFlank[position].boolPointOccupied == False:
@@ -144,7 +141,6 @@ class Enemy(object):
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
-                print "c"
                 position = randint(0, 3)
                 print str(spawnPointsBottom[position].boolPointOccupied)
                 if spawnPointsBottom[position].boolPointOccupied == False:
