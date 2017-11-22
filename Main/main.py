@@ -5,7 +5,9 @@ import sys
 import math
 from pygame.locals import *
 from spear import *
-from classEnemy import *
+import random
+from random import randint
+#from classEnemy import *
 import classSpawnPoint
 
 """
@@ -86,6 +88,7 @@ Define spawn
 """
 class Enemy(object):
     def __init__(self):
+        self.tag = 0
         self.image = pygame.image.load('ball.png')
         self.sizeX = self.image.get_width()
         self.sizeY = self.image.get_height()
@@ -154,8 +157,11 @@ class Enemy(object):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def moveTowardsPlayer(self):
+        enemyDistance = 160
         distance = math.sqrt(((objPlayer.x - self.x)**2)+((objPlayer.y - self.y)**2))
-        if distance > 200:
+        if self.tag != 1:
+            enemyDistance = math.sqrt(((objEnemy.x - self.x)**2)+((objEnemy.y - self.y)**2))
+        if distance > 150 and enemyDistance > 150:
             if self.x > objPlayer.x:
                 self.x -= 1
             elif self.x < objPlayer.x:
@@ -169,6 +175,12 @@ class Enemy(object):
                 self.y +=1
             else:
                 self.y = self.y
+# ----------------------------------------------------------------------------------------------------------------------
+    def enemyAttack(self):
+        distance = math.sqrt(((objPlayer.x - self.x) ** 2) + ((objPlayer.y - self.y) ** 2))
+        if distance <= 150:
+            dammage = self.strength
+            print str(dammage)
 #=======================================================================================================================
 pygame.init()
 # ----------------------------------------------------------------------------------------------------------------------
@@ -179,6 +191,9 @@ objPlayer = Player()
 objWeapon = spear(objPlayer)
 objEnemy = Enemy()
 objEnemyii = Enemy()
+#statLine = createEnemyStats()
+#objEnemy.spawnEnemies(statLine)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 objWeapon.enemies.append(objEnemy)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -254,7 +269,9 @@ spawnPointsBottom = {
 }
 # ----------------------------------------------------------------------------------------------------------------------
 objEnemy.spawn()
+objEnemy.tag = 1
 objEnemyii.spawn()
+objEnemyii.tag = 2
 # ======================================================================================================================
 while blnRunning:
 
@@ -321,6 +338,8 @@ while blnRunning:
 
     objEnemy.moveTowardsPlayer()
     objEnemyii.moveTowardsPlayer()
+    #objEnemy.enemyAttack()
+    #objEnemyii.enemyAttack()
     objPlayer.draw(screen)
     objWeapon.draw(screen)
     objEnemy.draw(screen)
