@@ -49,7 +49,7 @@ diceTwelve = 0
 diceTwenty = 0
 enemyStats = [enemyHP,enemyStrength,enemyDexterity,enemyPerception,enemyConstitution]
 # ----------------------------------------------------------------------------------------------------------------------
-def createEnemyStats(enemyHP,enemyStrength,enemyDexterity,enemyPerception,enemyConstitution):
+def createEnemyStats():
     enemyCreationPoints = 36
     while (enemyCreationPoints > 0):
         diceFour = randint(1,4)
@@ -75,17 +75,17 @@ def setSpawnPoints():
     spawnPointTest = (400,300)
     return spawnPointTest
 # ----------------------------------------------------------------------------------------------------------------------
-def spawnEnemies():
-    enemyStats = createEnemyStats(0,0,0,0,0)
-    enemyHP = enemyStats[0]
-    enemyStrength = enemyStats[1]
-    enemyDexterity = enemyStats[2]
-    enemyPerception = enemyStats[3]
-    enemyConstitution = enemyStats[4]
+def spawnEnemies(enemyStats):
+    enemyStats = createEnemyStats()
+    self.HP = enemyStats[0]
+    self.Strength = enemyStats[1]
+    self.Dexterity = enemyStats[2]
+    self.Perception = enemyStats[3]
+    self.Constitution = enemyStats[4]
     spawnLocation = setSpawnPoints()
     return spawnLocation
 # ----------------------------------------------------------------------------------------------------------------------
-spawnLocation = spawnEnemies()
+spawnLocation = spawnEnemies(enemyStats)
 
 
 # spawn
