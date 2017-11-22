@@ -136,7 +136,7 @@ class Enemy(object):
                     self.x = spawnPointsFlank[position].x
                     self.y = spawnPointsFlank[position].y
                     print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
+                    spawnPointsFlank[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,24 +149,26 @@ class Enemy(object):
                     self.y = spawnPointsBottom[position].y
                     print str(self.x)
                     print "(" + str(self.x) + "," + str(self.y) + ")"
-                    spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
+                    spawnPointsBottom[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
 # ----------------------------------------------------------------------------------------------------------------------
     def moveTowardsPlayer(self):
-        if self.x > objPlayer.x:
-            self.x -= 1
-        elif self.x < objPlayer.x:
-            self.x +=1
-        else:
-            self.x = self.x
+        distance = math.sqrt(((objPlayer.x - self.x)**2)+((objPlayer.y - self.y)**2))
+        if distance > 200:
+            if self.x > objPlayer.x:
+                self.x -= 1
+            elif self.x < objPlayer.x:
+                self.x +=1
+            else:
+                self.x = self.x
 
-        if self.y > objPlayer.y:
-            self.y -= 1
-        elif self.y < objPlayer.y:
-            self.y +=1
-        else:
-            self.y = self.y
+            if self.y > objPlayer.y:
+                self.y -= 1
+            elif self.y < objPlayer.y:
+                self.y +=1
+            else:
+                self.y = self.y
 #=======================================================================================================================
 pygame.init()
 # ----------------------------------------------------------------------------------------------------------------------
