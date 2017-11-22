@@ -7,7 +7,7 @@ from pygame.locals import *
 from spear import *
 import random
 from random import randint
-#from classEnemy import *
+from classEnemy import *
 import classSpawnPoint
 
 """
@@ -46,6 +46,8 @@ class Player(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, self.angle)
@@ -97,6 +99,13 @@ class Enemy(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+        self.statLine = createEnemyStats()
+        print str(self.statLine)
+        self.hp = self.statLine[0]
+        self.strength = self.statLine[1]
+        self.dexterity = self.statLine[2]
+        self.perception = self.statLine[3]
+        self.constitution = self.statLine[4]
 # ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, (1 * self.angle))
@@ -117,7 +126,7 @@ class Enemy(object):
             #print str(spawnPointsTop(0).x)
             side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
             print int(side)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             if side == 1:
                                        #  spawn location
                 position = randint(0,3)
@@ -130,7 +139,7 @@ class Enemy(object):
                     print "(" + str(self.x) + "," + str(self.y) + ")"
                     spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
-    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif side == 2:
                 position = randint(0, 3)
                 print str(spawnPointsFlank[position].boolPointOccupied)
@@ -142,7 +151,7 @@ class Enemy(object):
                     spawnPointsFlank[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
                 position = randint(0, 3)
                 print str(spawnPointsBottom[position].boolPointOccupied)
@@ -191,8 +200,6 @@ objPlayer = Player()
 objWeapon = spear(objPlayer)
 objEnemy = Enemy()
 objEnemyii = Enemy()
-#statLine = createEnemyStats()
-#objEnemy.spawnEnemies(statLine)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 objWeapon.enemies.append(objEnemy)
