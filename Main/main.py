@@ -7,9 +7,10 @@ from pygame.locals import *
 from spear import *
 import random
 from random import randint
-#from classEnemy import *
+from classEnemy import *
 import classSpawnPoint
 
+SCORE = 0
 """
 ========================================================================================================================
 Player Class
@@ -46,6 +47,10 @@ class Player(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+        self.hp = 100
+        self.alive = True
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, self.angle)
@@ -97,6 +102,13 @@ class Enemy(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+        self.statLine = createEnemyStats()
+        print str(self.statLine)
+        self.hp = self.statLine[0]
+        self.strength = self.statLine[1]
+        self.dexterity = self.statLine[2]
+        self.perception = self.statLine[3]
+        self.constitution = self.statLine[4]
 # ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
         rotImage = pygame.transform.rotate(self.image, (1 * self.angle))
@@ -117,7 +129,7 @@ class Enemy(object):
             #print str(spawnPointsTop(0).x)
             side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
             print int(side)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             if side == 1:
                                        #  spawn location
                 position = randint(0,3)
@@ -130,7 +142,7 @@ class Enemy(object):
                     print "(" + str(self.x) + "," + str(self.y) + ")"
                     spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
-    # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif side == 2:
                 position = randint(0, 3)
                 print str(spawnPointsFlank[position].boolPointOccupied)
@@ -142,7 +154,7 @@ class Enemy(object):
                     spawnPointsFlank[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
                 position = randint(0, 3)
                 print str(spawnPointsBottom[position].boolPointOccupied)
@@ -182,6 +194,25 @@ class Enemy(object):
             dammage = self.strength
             print str(dammage)
 #=======================================================================================================================
+def refresh():
+    global SCORE
+    if objPlayer.hp <= 0:
+        screen.fill((0, 0, 0))
+        font = pygame.font.Font(None, 60)
+        gameOverText = font.render("GAME OVER", True, ((255,0,0)), ((0,0,0)))
+        scoreText = font.render(("Score:" + str(SCORE)), True, ((255, 0, 0)), ((0, 0, 0)))
+        screen.blit(gameOverText,(400,450))
+        screen.blit(scoreText, (450, 550))
+        pygame.display.update()
+        objPlayer.alive = False
+    for enemy in objWeapon.enemies:
+        if enemy.hp <= 0:
+            enemy.hp = 100
+            enemy.spawn()
+            SCORE += 10
+
+    return True
+#=======================================================================================================================
 pygame.init()
 # ----------------------------------------------------------------------------------------------------------------------
 screenX, screenY = 1000, 1000
@@ -191,11 +222,10 @@ objPlayer = Player()
 objWeapon = spear(objPlayer)
 objEnemy = Enemy()
 objEnemyii = Enemy()
-#statLine = createEnemyStats()
-#objEnemy.spawnEnemies(statLine)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 objWeapon.enemies.append(objEnemy)
+objWeapon.enemies.append(objEnemyii)
 # ----------------------------------------------------------------------------------------------------------------------
 clock = pygame.time.Clock()
 # ----------------------------------------------------------------------------------------------------------------------
@@ -298,7 +328,6 @@ while blnRunning:
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
-
         elif event.type == pygame.KEYDOWN:
             # Toggle the cursor
             if event.key == pygame.K_ESCAPE:
@@ -333,16 +362,19 @@ while blnRunning:
             objPlayer.moveDown(half)
         if keys[K_d]:
             objPlayer.moveRight(half)
-
-    screen.fill((255, 255, 255))
-
-    objEnemy.moveTowardsPlayer()
-    objEnemyii.moveTowardsPlayer()
-    #objEnemy.enemyAttack()
-    #objEnemyii.enemyAttack()
-    objPlayer.draw(screen)
-    objWeapon.draw(screen)
-    objEnemy.draw(screen)
-    objEnemyii.draw(screen)
-    pygame.display.update()
-    clock.tick(40)
+        # Debug Player HP to 0
+        if keys[K_BACKSPACE]:
+            objPlayer.hp = 0
+    if objPlayer.alive == True:
+        screen.fill((255, 255, 255))
+        objEnemy.moveTowardsPlayer()
+        objEnemyii.moveTowardsPlayer()
+        #objEnemy.enemyAttack()
+        #objEnemyii.enemyAttack()
+        objPlayer.draw(screen)
+        objWeapon.draw(screen)
+        objEnemy.draw(screen)
+        objEnemyii.draw(screen)
+        pygame.display.update()
+        refresh()
+        clock.tick(40)

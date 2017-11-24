@@ -3,6 +3,7 @@
 """
 import pygame
 import math
+from random import randint
 # ======================================================================================================================
 class spear():
 # ----------------------------------------------------------------------------------------------------------------------
@@ -56,6 +57,8 @@ class spear():
                                     pygame.Rect(self.enemies[enemy].x, self.enemies[enemy].y,
                                                 self.enemies[enemy].sizeX, self.enemies[enemy].sizeY)):
                                 # If a collision occurs, move the spear back
+                                self.enemies[enemy].hp = self.enemies[enemy].hp - randint(12,27)
+                                print str(self.enemies[enemy].hp)
                                 self.weaponReachForwards = False
                                 break
 # **********************************************************************************************************************
