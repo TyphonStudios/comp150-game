@@ -10,6 +10,7 @@ from random import randint
 from classEnemy import *
 import classSpawnPoint
 
+SCORE = 0
 """
 ========================================================================================================================
 Player Class
@@ -46,6 +47,8 @@ class Player(object):
         self.angle = 0
         self.speed = 2
         self.rect = self.image.get_rect()
+        self.hp = 100
+        self.alive = True
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -191,6 +194,25 @@ class Enemy(object):
             dammage = self.strength
             print str(dammage)
 #=======================================================================================================================
+def refresh():
+    global SCORE
+    if objPlayer.hp <= 0:
+        screen.fill((0, 0, 0))
+        font = pygame.font.Font(None, 60)
+        gameOverText = font.render("GAME OVER", True, ((255,0,0)), ((0,0,0)))
+        scoreText = font.render(("Score:" + str(SCORE)), True, ((255, 0, 0)), ((0, 0, 0)))
+        screen.blit(gameOverText,(400,450))
+        screen.blit(scoreText, (450, 550))
+        pygame.display.update()
+        objPlayer.alive = False
+    for enemy in objWeapon.enemies:
+        if enemy.hp <= 0:
+            enemy.hp = 100
+            enemy.spawn()
+            SCORE += 10
+
+    return True
+#=======================================================================================================================
 pygame.init()
 # ----------------------------------------------------------------------------------------------------------------------
 screenX, screenY = 1000, 1000
@@ -203,6 +225,7 @@ objEnemyii = Enemy()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 objWeapon.enemies.append(objEnemy)
+objWeapon.enemies.append(objEnemyii)
 # ----------------------------------------------------------------------------------------------------------------------
 clock = pygame.time.Clock()
 # ----------------------------------------------------------------------------------------------------------------------
@@ -305,7 +328,6 @@ while blnRunning:
         elif event.type == QUIT:
             pygame.quit()
             sys.exit()
-
         elif event.type == pygame.KEYDOWN:
             # Toggle the cursor
             if event.key == pygame.K_ESCAPE:
@@ -340,16 +362,19 @@ while blnRunning:
             objPlayer.moveDown(half)
         if keys[K_d]:
             objPlayer.moveRight(half)
-
-    screen.fill((255, 255, 255))
-
-    objEnemy.moveTowardsPlayer()
-    objEnemyii.moveTowardsPlayer()
-    #objEnemy.enemyAttack()
-    #objEnemyii.enemyAttack()
-    objPlayer.draw(screen)
-    objWeapon.draw(screen)
-    objEnemy.draw(screen)
-    objEnemyii.draw(screen)
-    pygame.display.update()
-    clock.tick(40)
+        # Debug Player HP to 0
+        if keys[K_BACKSPACE]:
+            objPlayer.hp = 0
+    if objPlayer.alive == True:
+        screen.fill((255, 255, 255))
+        objEnemy.moveTowardsPlayer()
+        objEnemyii.moveTowardsPlayer()
+        #objEnemy.enemyAttack()
+        #objEnemyii.enemyAttack()
+        objPlayer.draw(screen)
+        objWeapon.draw(screen)
+        objEnemy.draw(screen)
+        objEnemyii.draw(screen)
+        pygame.display.update()
+        refresh()
+        clock.tick(40)
