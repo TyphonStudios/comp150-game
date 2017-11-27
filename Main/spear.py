@@ -50,7 +50,7 @@ class spear():
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                         for enemy in xrange(len(self.enemies)):
                             # Debug hitbox
-                            pygame.draw.rect(surface, (255,0,0), (tempX + 40, tempY, self.sizeX, self.sizeY))
+                            #pygame.draw.rect(surface, (255,0,0), (tempX + 40, tempY, self.sizeX, self.sizeY))
                             # Check if our hitbox collides with an enemy
 # **********************************************************************************************************************
                             if pygame.Rect(tempX + 40, tempY, self.sizeX, self.sizeY).colliderect(
