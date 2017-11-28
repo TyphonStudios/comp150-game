@@ -1,7 +1,7 @@
 """
 ========================================================================================================================
 Author: Connor Sean Rodgers
-Program: Enemy Class
+Program: Enemy Functions
 Purpose: Blueprint for the enemies and the creation of these enemies
 ========================================================================================================================
 """
@@ -9,7 +9,7 @@ Purpose: Blueprint for the enemies and the creation of these enemies
 import random
 import math
 import pygame
-
+import dice
 from random import randint
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -33,8 +33,6 @@ def draw(self, surface):
     surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
     surface.blit(self.image, (self.x, self.y))
 # ----------------------------------------------------------------------------------------------------------------------
-
-# ----------------------------------------------------------------------------------------------------------------------
 enemyHP = 0
 enemyStrength = 0
 enemyDexterity = 0
@@ -56,7 +54,7 @@ def createEnemyStats():
     enemyPerception = 0
     enemyConstitution = 0
     while (enemyCreationPoints > 0):
-        diceFour = randint(1,4)
+        diceFour = dice.rollFour()
         if diceFour == 1:
             enemyStrength += 1
         elif diceFour == 2:
@@ -79,28 +77,3 @@ def spawnEnemies(enemyStats):
     self.Constitution = enemyStats[4]
     return 0
 # ----------------------------------------------------------------------------------------------------------------------
-
-
-# spawn
-#   - no overlap
-#   - off screen
-#   - x spawn points of screen
-#       - if spawn point 1 contins enemy{
-#           - Generate list without spawn point 1
-#           - Spawn enemy in random spawn point}
-# moving
-#   - move towards player
-#   - cone of influence for steering behaviour
-#       - look at direction that the collision is moving and make use of the vectors to rotate to avoid colision while
-#           remaining on the same path
-#           - line interception?
-#               - polygon testing?
-# attacking/defending
-#   -D&D
-# death
-"""
-for x in range (1...4){
-    "spawnPointT" + x
-}
-
-"""

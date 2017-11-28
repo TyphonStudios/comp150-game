@@ -1,3 +1,7 @@
+"""
+Author: Connor Sean Rodgers, Zakary Bruce-Kyle
+Class: Main
+"""
 #Imports
 from __future__ import division
 import pygame
@@ -5,16 +9,15 @@ import sys
 import math
 from pygame.locals import *
 from spear import *
-import random
-from random import randint
 from classEnemy import *
 import classSpawnPoint
+import dice
 
 SCORE = 0
 """
 ========================================================================================================================
 Player Class
-Define self
+Define init
     sprite = ball
     x = 1
     y = 1
@@ -72,7 +75,7 @@ class Player(object):
 """
 ========================================================================================================================
 Enemy Class
-Define self
+Define init
     sprite = ball
     x = 0
     y = 0
@@ -86,14 +89,17 @@ Define draw
     transfer to screen
 
 Define spawn
-    Randomly select a spawn point that is predefined, these points are allong 3 sides of the screen and an enemy can
+    Randomly select a spawn point from a predefined list, these points are along 3 sides of the screen and an enemy can
     spawn on any one of these 12 spawn points with an even chance
 
+Define moveTowardsPlayer
+    Checks the distance between the enemy object and the player object, then accordingly adjusts it's X and Y co-ordinates
+    in order to
 ========================================================================================================================
 """
 class Enemy(object):
-    def __init__(self):
-        self.tag = 0
+    def __init__(self, tag = 0):
+        self.tag = tag
         self.image = pygame.image.load('ball.png')
         self.sizeX = self.image.get_width()
         self.sizeY = self.image.get_height()
@@ -115,7 +121,6 @@ class Enemy(object):
         self.angle = math.atan2((self.x - objPlayer.x), (self.y -  objPlayer.y))
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
         surface.blit(self.image, (self.x,self.y))
-
 # ----------------------------------------------------------------------------------------------------------------------
     def spawn(self):
         """
@@ -124,22 +129,16 @@ class Enemy(object):
         """
         mustSpawn = True
         while mustSpawn == True:
-            side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
+            side = dice.rollThree() # calculate if the enemy will spawn along the top, bottom or flank
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            if side == 1:
-                                       #  spawn location
-                position = randint(0,3)
-                if spawnPointsTop[position].boolPointOccupied == False:
-                   # self.spawnPoint = spawnPointsTop[position]
+                position = dice.rollThree()                if spawnPointsTop[position].boolPointOccupied == False:
                     self.x = spawnPointsTop[position].x
                     self.y = spawnPointsTop[position].y
                     spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif side == 2:
-                position = randint(0, 3)
-                if spawnPointsFlank[position].boolPointOccupied == False:
-                    #self.spawnPoint = spawnPointsFlank[position]
+                position = dice.rollThree()                if spawnPointsFlank[position].boolPointOccupied == False:
                     self.x = spawnPointsFlank[position].x
                     self.y = spawnPointsFlank[position].y
                     spawnPointsFlank[position].boolPointOccupied = True  # set spawn to occupied
@@ -147,9 +146,8 @@ class Enemy(object):
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
-                position = randint(0, 3)
+                position = dice.rollThree()
                 if spawnPointsBottom[position].boolPointOccupied == False:
-                    #self.spawnPoint = spawnPointsBottom[position]
                     self.x = spawnPointsBottom[position].x
                     self.y = spawnPointsBottom[position].y
                     spawnPointsBottom[position].boolPointOccupied = True  # set spawn to occupied
@@ -158,29 +156,24 @@ class Enemy(object):
 # ----------------------------------------------------------------------------------------------------------------------
     def moveTowardsPlayer(self):
         enemyDistance = 160
-        distance = math.sqrt(((objPlayer.x - self.x)**2)+((objPlayer.y - self.y)**2))
+        distance = math.sqrt(((objPlayer.x - self.x)**2) + ((objPlayer.y - self.y)**2))
         if self.tag != 1:
-            enemyDistance = math.sqrt(((objEnemy.x - self.x)**2)+((objEnemy.y - self.y)**2))
+            enemyDistance = math.sqrt(((objEnemy.x - self.x)**2) + ((objEnemy.y - self.y)**2))
         if distance > 150 and enemyDistance > 150:
             if self.x > objPlayer.x:
                 self.x -= 1
             elif self.x < objPlayer.x:
-                self.x +=1
+                self.x += 1
             else:
                 self.x = self.x
 
             if self.y > objPlayer.y:
                 self.y -= 1
             elif self.y < objPlayer.y:
-                self.y +=1
+                self.y += 1
             else:
                 self.y = self.y
-# ----------------------------------------------------------------------------------------------------------------------
-    def enemyAttack(self):
-        distance = math.sqrt(((objPlayer.x - self.x) ** 2) + ((objPlayer.y - self.y) ** 2))
-        if distance <= 150:
-            dammage = self.strength
-#=======================================================================================================================
+# ----------------------------------------------------------------------------------------------------------------------#=======================================================================================================================
 def refresh():
     global SCORE
     if objPlayer.hp <= 0:
@@ -204,12 +197,12 @@ pygame.init()
 # ----------------------------------------------------------------------------------------------------------------------
 screenX, screenY = 1000, 1000
 screen = pygame.display.set_mode((screenX, screenY))
+pygame.display.set_caption("Gaze Of Balor")
 # ----------------------------------------------------------------------------------------------------------------------
 objPlayer = Player()
 objWeapon = spear(objPlayer)
-objEnemy = Enemy()
-objEnemyii = Enemy()
-
+objEnemy = Enemy(1)
+objEnemyii = Enemy(2)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 objWeapon.enemies.append(objEnemy)
 objWeapon.enemies.append(objEnemyii)
@@ -226,69 +219,43 @@ spawnPointsTop = []
 spawnPointsFlank = []
 spawnPointsBottom = []
 # ----------------------------------------------------------------------------------------------------------------------
-spawnT1 = classSpawnPoint.spawnPoint()
-spawnT2 = classSpawnPoint.spawnPoint()
-spawnT3 = classSpawnPoint.spawnPoint()
-spawnT4 = classSpawnPoint.spawnPoint()
-spawnF1 = classSpawnPoint.spawnPoint()
-spawnF2 = classSpawnPoint.spawnPoint()
-spawnF3 = classSpawnPoint.spawnPoint()
-spawnF4 = classSpawnPoint.spawnPoint()
-spawnB1 = classSpawnPoint.spawnPoint()
-spawnB2 = classSpawnPoint.spawnPoint()
-spawnB3 = classSpawnPoint.spawnPoint()
-spawnB4 = classSpawnPoint.spawnPoint()
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-spawnT1.x = 0
-spawnT2.x = 160
-spawnT3.x = 360
-spawnT4.x = 760
-spawnF1.x = 800
-spawnF2.x = 800
-spawnF3.x = 800
-spawnF4.x = 800
-spawnB1.x = 0
-spawnB2.x = 160
-spawnB3.x = 360
-spawnB4.x = 760
-spawnT1.y = 0
-spawnT2.y = 0
-spawnT3.y = 0
-spawnT4.y = 0
-spawnF1.y = 0
-spawnF2.y = 200
-spawnF3.y = 400
-spawnF4.y = 540
-spawnB1.y = 600
-spawnB2.y = 600
-spawnB3.y = 600
-spawnB4.y = 600
+spawnTi = classSpawnPoint.spawnPoint(0,0)
+spawnTii = classSpawnPoint.spawnPoint(160,0)
+spawnTiii = classSpawnPoint.spawnPoint(360,0)
+spawnTiv = classSpawnPoint.spawnPoint(760, 0)
+spawnFi = classSpawnPoint.spawnPoint(800, 0)
+spawnFii = classSpawnPoint.spawnPoint(800, 200)
+spawnFiii = classSpawnPoint.spawnPoint(800, 400)
+spawnFiv= classSpawnPoint.spawnPoint(800, 540)
+spawnBi = classSpawnPoint.spawnPoint(0, 800)
+spawnBii = classSpawnPoint.spawnPoint(160, 800)
+spawnBiii = classSpawnPoint.spawnPoint(360, 800)
+spawnBiv = classSpawnPoint.spawnPoint(760, 800)
+
 # ----------------------------------------------------------------------------------------------------------------------
 spawnPointsTop = {
-    0: spawnT1,
-    1: spawnT2,
-    2: spawnT3,
-    3: spawnT4
+    0: spawnTi,
+    1: spawnTii,
+    2: spawnTiii,
+    3: spawnTiv
 }
 # ----------------------------------------------------------------------------------------------------------------------
 spawnPointsFlank = {
-    0: spawnF1,
-    1: spawnF2,
-    2: spawnF3,
-    3: spawnF4
+    0: spawnFi,
+    1: spawnFii,
+    2: spawnFiii,
+    3: spawnFiv
 }
 # ----------------------------------------------------------------------------------------------------------------------
 spawnPointsBottom = {
-    0: spawnB1,
-    1: spawnB2,
-    2: spawnB3,
-    3: spawnB4
+    0: spawnBi,
+    1: spawnBii,
+    2: spawnBiii,
+    3: spawnBiv
 }
 # ----------------------------------------------------------------------------------------------------------------------
 objEnemy.spawn()
-objEnemy.tag = 1
 objEnemyii.spawn()
-objEnemyii.tag = 2
 # ======================================================================================================================
 while blnRunning:
 
@@ -356,8 +323,6 @@ while blnRunning:
         screen.fill((255, 255, 255))
         objEnemy.moveTowardsPlayer()
         objEnemyii.moveTowardsPlayer()
-        #objEnemy.enemyAttack()
-        #objEnemyii.enemyAttack()
         objPlayer.draw(screen)
         objWeapon.draw(screen)
         objEnemy.draw(screen)

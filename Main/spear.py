@@ -1,10 +1,38 @@
 """
-
+Author: Zakary Bruce-Kyle
+Class: Spear
 """
 import pygame
 import math
 from random import randint
 # ======================================================================================================================
+"""
+========================================================================================================================
+Spear Class
+Define init
+    sprite = spear
+    parent = player
+    enemies = array of enemies
+    inAttack = whether the attack code is being run or not
+    weaponReachProgress = how far the spear is from the player
+    weaponReachForwards = whether to move the spear forwards or backwards
+    weaponReach = maximum distance the spear can move forwards
+    weaponSpeed = how fast the spear attack is
+
+Define draw
+    Get the parent's positions (the player) and set that as the origin of the spear,
+    then rotate the spear by the parent's angle + 90 degrees and move outwards from the player, by their side.
+    If inAttack is true, see if the weapon should move forwards or backwards. Forwards will continue the attack
+    whilst backwards will start to bring the spear back to reset inAttack. Then if still going forwards, loop through
+    all the enemies to see if they collide with the spear and apply random damage if they do collide then start to
+    bring the spear back and make inAttack false. Finally draw the spear with the new coordinates.
+
+Define attack
+    Set inAttack to true to start the attack if it's currently false.
+
+
+========================================================================================================================
+"""
 class spear():
 # ----------------------------------------------------------------------------------------------------------------------
     def __init__(self, parent):
@@ -13,7 +41,6 @@ class spear():
         self.sizeY = self.image.get_height()
         self.parent = parent
         self.rect = self.image.get_rect()
-        self.pos = pygame.math.Vector2(0, 0)
         self.enemies = []
 
         self.inAttack = False
@@ -23,9 +50,8 @@ class spear():
         self.weaponSpeed = 4
 # ----------------------------------------------------------------------------------------------------------------------
     def draw(self, surface):
-        posX = self.parent.x + self.pos.x
-        posY = self.parent.y + self.pos.y
-
+        posX = self.parent.x
+        posY = self.parent.y
         # Adjust in a direction +90 degrees to the direction pointed at
         posX += math.sin(math.radians(self.parent.angle + 90)) * 80
         posY += math.cos(math.radians(self.parent.angle + 90)) * 80
