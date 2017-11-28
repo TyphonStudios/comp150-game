@@ -58,7 +58,6 @@ class spear():
                                                 self.enemies[enemy].sizeX, self.enemies[enemy].sizeY)):
                                 # If a collision occurs, move the spear back
                                 self.enemies[enemy].hp = self.enemies[enemy].hp - randint(12,27)
-                                print str(self.enemies[enemy].hp)
                                 self.weaponReachForwards = False
                                 break
 # **********************************************************************************************************************

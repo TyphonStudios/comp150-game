@@ -32,7 +32,6 @@ def draw(self, surface):
     rotRect = rotImage.get_rect(center=self.rect.center)
     surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
     surface.blit(self.image, (self.x, self.y))
-    pygame.display.update
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -67,12 +66,7 @@ def createEnemyStats():
         else:
             enemyConstitution += 1
         enemyCreationPoints -= 1
-    print "Strength:" + str(enemyStrength)
-    print "Dexterity:" + str(enemyDexterity)
-    print "Perception:" + str(enemyPerception)
-    print "Constitution:" + str(enemyConstitution)
     enemyHP = enemyConstitution * 10
-    print "HP:" + str(enemyHP)
     enemyStats = [enemyHP, enemyStrength, enemyDexterity, enemyPerception, enemyConstitution]
     return enemyStats
 # ----------------------------------------------------------------------------------------------------------------------

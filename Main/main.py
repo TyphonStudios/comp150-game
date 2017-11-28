@@ -103,7 +103,6 @@ class Enemy(object):
         self.speed = 2
         self.rect = self.image.get_rect()
         self.statLine = createEnemyStats()
-        print str(self.statLine)
         self.hp = self.statLine[0]
         self.strength = self.statLine[1]
         self.dexterity = self.statLine[2]
@@ -116,7 +115,6 @@ class Enemy(object):
         self.angle = math.atan2((self.x - objPlayer.x), (self.y -  objPlayer.y))
         surface.blit(rotImage, (self.x + rotRect.x, self.y + rotRect.y))
         surface.blit(self.image, (self.x,self.y))
-        pygame.display.update
 
 # ----------------------------------------------------------------------------------------------------------------------
     def spawn(self):
@@ -126,44 +124,34 @@ class Enemy(object):
         """
         mustSpawn = True
         while mustSpawn == True:
-            #print str(spawnPointsTop(0).x)
             side = randint(1,3) # calculate if the enemy will spawn along the top, bottom or flank
-            print int(side)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             if side == 1:
                                        #  spawn location
                 position = randint(0,3)
-                print str(spawnPointsTop[position].boolPointOccupied)
                 if spawnPointsTop[position].boolPointOccupied == False:
                    # self.spawnPoint = spawnPointsTop[position]
                     self.x = spawnPointsTop[position].x
                     self.y = spawnPointsTop[position].y
-                    print str(self.x)
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
                     spawnPointsTop[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             elif side == 2:
                 position = randint(0, 3)
-                print str(spawnPointsFlank[position].boolPointOccupied)
                 if spawnPointsFlank[position].boolPointOccupied == False:
                     #self.spawnPoint = spawnPointsFlank[position]
                     self.x = spawnPointsFlank[position].x
                     self.y = spawnPointsFlank[position].y
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
                     spawnPointsFlank[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
                 position = randint(0, 3)
-                print str(spawnPointsBottom[position].boolPointOccupied)
                 if spawnPointsBottom[position].boolPointOccupied == False:
                     #self.spawnPoint = spawnPointsBottom[position]
                     self.x = spawnPointsBottom[position].x
                     self.y = spawnPointsBottom[position].y
-                    print str(self.x)
-                    print "(" + str(self.x) + "," + str(self.y) + ")"
                     spawnPointsBottom[position].boolPointOccupied = True  # set spawn to occupied
                     mustSpawn = False
 
@@ -192,7 +180,6 @@ class Enemy(object):
         distance = math.sqrt(((objPlayer.x - self.x) ** 2) + ((objPlayer.y - self.y) ** 2))
         if distance <= 150:
             dammage = self.strength
-            print str(dammage)
 #=======================================================================================================================
 def refresh():
     global SCORE
